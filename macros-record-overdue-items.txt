@@ -1,0 +1,67 @@
+Sub record_past_due_dates()
+    Dim cell As Range
+    Dim lastRow As Integer
+    lastRow = 11  ' Set the last row to check for dates
+
+    For Each cell In Range("A2:A" & lastRow)
+        If cell.Value > Date Then
+            cell.Offset(0, 1).Value = "OVERDUE"  ' Write "OVERDUE" in the cell next to the overdue date
+        Else
+            cell.Offset(0, 1).Value = ""  ' Clear the text if not overdue
+        End If
+    Next cell
+End Sub
+
+
+
+Highlight row red
+
+Sub record_past_due_dates()
+    Dim cell As Range
+    Dim lastRow As Integer
+    lastRow = 11  ' Set the last row to check for dates
+
+    Application.ScreenUpdating = False  ' Turn off screen updating to speed up the macro
+
+    For Each cell In Range("A2:A" & lastRow)
+        With cell
+            If .Value > Date Then
+                .Offset(0, 1).Value = "OVERDUE"  ' Write "OVERDUE" in the cell next to the overdue date
+                .EntireRow.Interior.Color = RGB(255, 0, 0)  ' Highlight the entire row in red
+            Else
+                .Offset(0, 1).Value = ""  ' Clear the text if not overdue
+                .EntireRow.Interior.ColorIndex = xlNone  ' Clear any background color if not overdue
+            End If
+        End With
+    Next cell
+
+    Application.ScreenUpdating = True  ' Turn on screen updating
+End Sub
+
+
+Apply to dynamic range -- not just column A
+
+Sub record_past_due_dates()
+    Dim cell As Range
+    Dim selectedRange As Range
+
+    ' Check if the selection is a range and if it contains dates
+    If Not TypeName(Selection) = "Range" Then
+        MsgBox "Please select a range containing dates.", vbExclamation
+        Exit Sub
+    End If
+
+    ' Assign the selected range to a variable
+    Set selectedRange = Selection
+
+    ' Loop through each cell in the selected range
+    For Each cell In selectedRange
+        If IsDate(cell.Value) Then  ' Check if the cell contains a date
+            If cell.Value > Date Then
+                cell.Offset(0, 1).Value = "OVERDUE"  ' Mark the next cell as OVERDUE
+            Else
+                cell.Offset(0, 1).Value = ""  ' Clear the text if not overdue
+            End If
+        End If
+    Next cell
+End Sub

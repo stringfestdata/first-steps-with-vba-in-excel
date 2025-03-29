@@ -1,0 +1,12 @@
+Sub AddRateValidation()
+    With Range("C2:C10").Validation
+        .Delete ' Clear any existing validation
+        .Add Type:=xlValidateDecimal, _
+             AlertStyle:=xlValidAlertStop, _
+             Operator:=xlBetween, _
+             Formula1:="0", _
+             Formula2:="15"
+        .ErrorTitle = "Invalid Rate"
+        .ErrorMessage = "Rate must be between 0 and 15!"
+    End With
+End Sub
